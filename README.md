@@ -7,4 +7,4 @@
 
 # Authentiication
 
-- Luucia auth (https://lucia-auth.com/)
+- Lucia auth (https://lucia-auth.com/)
