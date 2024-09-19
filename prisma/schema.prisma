@@ -42,7 +42,7 @@ model Session{
   id String @id
   userId String
   expiresAt DateTime
-  User User @relation(fields: [userId], references: [id], onDelete: Cascade) //defining a relationship between the Session model and the User model
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade) //defining a relationship between the Session model and the User model
 
   @@map("sessions")
 }
