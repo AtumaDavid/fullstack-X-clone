@@ -1,5 +1,10 @@
 import Image from "next/image";
+import MenuBar from "./MenuBar";
 
 export default function Home() {
-  return <div>home</div>;
+  return (
+    <main>
+      <div>main page</div>
+    </main>
+  );
 }
