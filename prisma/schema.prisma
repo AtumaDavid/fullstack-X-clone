@@ -32,6 +32,7 @@ model User{
   avatarUrl String?
   bio String?
   sessions Session[] //a user can have multiple sessions(can be logged in multiple devices at once)
+  posts Post[]
 
   createdAt DateTime @default(now())
 
@@ -45,4 +46,14 @@ model Session{
   user User @relation(fields: [userId], references: [id], onDelete: Cascade) //defining a relationship between the Session model and the User model
 
   @@map("sessions")
+}
+
+model Post{
+  id String @id @default(cuid())
+  content String
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  @@map("posts")
 }
