@@ -20,6 +20,7 @@
     ],
     "paths": {
       "@/*": ["./src/*"]
+      // "@tanstack/react-query": ["./node_modules/@tanstack/react-query"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
