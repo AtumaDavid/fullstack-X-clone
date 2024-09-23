@@ -12,3 +12,8 @@
 # Post Editor
 
 - [tiptap] (https://tiptap.dev/docs)
+
+# Data fetching
+
+- React Query
+- [ky] (https://github.com/sindresorhus/ky)

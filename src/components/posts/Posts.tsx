@@ -28,6 +28,7 @@ export default function Posts({ post }: PostProps) {
             className="block text-sm text-muted-foreground hover:underline"
           >
             {/* {formatRelativeDate(post.createdAt)} */}
+            {formatRelativeDate(post.createdAt)}
           </Link>
         </div>
       </div>
