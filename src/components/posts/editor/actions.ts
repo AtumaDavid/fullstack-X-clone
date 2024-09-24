@@ -1,3 +1,5 @@
+// server action to create a post
+
 "use server";
 
 import { validateRequest } from "@/auth";
