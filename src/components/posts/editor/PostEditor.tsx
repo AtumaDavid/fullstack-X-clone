@@ -8,10 +8,15 @@ import { useSession } from "@/app/(main)/SessionProvider";
 import UserAvatar from "@/components/UserAvatar";
 import { Button } from "@/components/ui/button";
 import "./styles.css";
+import { useSubmiitPostMutation } from "./mutations";
+import LoadingButton from "@/components/LoadingButton";
+
 // import LoadingButton from "@/components/LoadingButton";
 
 export default function PostEditor() {
   const { user } = useSession();
+  const mutation = useSubmiitPostMutation();
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -29,9 +34,13 @@ export default function PostEditor() {
       blockSeparator: "\n",
     }) || "";
 
-  async function onSubmit() {
-    await submitPost(input);
-    editor?.commands.clearContent();
+  function onSubmit() {
+    // submitPost(input);
+    mutation.mutate(input, {
+      onSuccess: () => {
+        editor?.commands.clearContent();
+      },
+    });
   }
   return (
     <div className="flex flex-col gap-5 rounded-2xl bg-card p-5 shadow-sm">
@@ -46,21 +55,21 @@ export default function PostEditor() {
         />
       </div>
       <div className="flex justify-end">
-        <Button
+        {/* <Button
           onClick={onSubmit}
           disabled={!input.trim()}
           className="min-w-20"
         >
           Post
-        </Button>
-        {/* <LoadingButton
+        </Button> */}
+        <LoadingButton
           onClick={onSubmit}
+          loading={mutation.isPending}
           disabled={!input.trim()}
           className="min-w-20"
-          loading
         >
           Post
-        </LoadingButton> */}
+        </LoadingButton>
       </div>
     </div>
   );

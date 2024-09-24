@@ -1,5 +1,7 @@
 "use client";
+import InfiniteScrollContainer from "@/components/InfiniteScrollContainer";
 import Posts from "@/components/posts/Posts";
+import PostsLoadingSkeleton from "@/components/posts/PostsLoadingSkeleton";
 import { Button } from "@/components/ui/button";
 import kyInstance from "@/lib/ky";
 import { PostData, PostsPage } from "@/lib/types";
@@ -33,7 +35,12 @@ export default function ForYouFeed() {
   const posts = data?.pages.flatMap((page) => page.posts) || [];
 
   if (status === "pending") {
-    return <Loader2 className="mx-auto animate-spin" />;
+    // return <Loader2 className="mx-auto animate-spin" />;
+    return <PostsLoadingSkeleton />;
+  }
+
+  if (status === "success" && !posts.length && !hasNextPage) {
+    return <p className="text-center text-muted">No posts</p>;
   }
 
   if (status === "error") {
@@ -44,11 +51,16 @@ export default function ForYouFeed() {
     );
   }
   return (
-    <div className="space-y-5">
+    <InfiniteScrollContainer
+      className="space-y-5"
+      onBottomReached={() => hasNextPage && !isFetching && fetchNextPage()}
+    >
       {posts.map((post) => (
         <Posts key={post.id} post={post} />
       ))}
-      <Button onClick={() => fetchNextPage()}>load more</Button>
-    </div>
+
+      {isFetchingNextPage && <Loader2 className="mx-auto my-3 animate-spin" />}
+      {/* <Button onClick={() => fetchNextPage()}>load more</Button> */}
+    </InfiniteScrollContainer>
   );
 }
