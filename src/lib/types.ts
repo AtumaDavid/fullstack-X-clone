@@ -29,3 +29,8 @@ export type PostData = Prisma.PostGetPayload<{
 // which means it conforms to the expected shape of an include object for Prisma's Post model.
 
 // The PostData type is then defined as the payload type of a Prisma query that includes the fields specified in PostsDataInclude.
+
+export interface PostsPage {
+  posts: PostData[];
+  nextCursor: string | null;
+}
