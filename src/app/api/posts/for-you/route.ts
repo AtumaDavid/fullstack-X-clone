@@ -1,11 +1,12 @@
 import { validateRequest } from "@/auth";
 import prisma from "@/lib/prisma";
-import { PostsDataInclude, PostsPage } from "@/lib/types";
+import { getPostDataInclude, PostsPage } from "@/lib/types";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
   try {
     const cursor = req.nextUrl.searchParams.get("cursor") || undefined;
+
     const pageSize = 10;
 
     const { user } = await validateRequest();
@@ -15,7 +16,7 @@ export async function GET(req: NextRequest) {
     }
 
     const posts = await prisma.post.findMany({
-      include: PostsDataInclude,
+      include: getPostDataInclude(user.id),
       orderBy: { createdAt: "desc" },
       take: pageSize + 1,
       cursor: cursor ? { id: cursor } : undefined,
@@ -28,10 +29,9 @@ export async function GET(req: NextRequest) {
       nextCursor,
     };
 
-    // return Response.json(posts);
     return Response.json(data);
   } catch (error) {
     console.error(error);
-    return Response.json({ error: "Internal Sever serror" }, { status: 500 });
+    return Response.json({ error: "Internal server error" }, { status: 500 });
   }
 }

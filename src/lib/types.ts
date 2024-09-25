@@ -1,25 +1,46 @@
 // import { userDataSelect } from './types';
 import { Prisma } from "@prisma/client";
 
-export const userDataSelect = {
-  id: true,
-  username: true,
-  displayName: true,
-  avatarUrl: true,
-} satisfies Prisma.UserSelect; // This object conforms to the Prisma.PostInclude interface
+export function getUserDataFunctionSelect(loggedInUserId: string) {
+  return {
+    id: true,
+    username: true,
+    displayName: true,
+    avatarUrl: true,
+    followers: {
+      where: {
+        followerId: loggedInUserId,
+      },
+      select: {
+        followerId: true,
+      },
+    },
+    _count: {
+      select: {
+        followers: true,
+      },
+    },
+  } satisfies Prisma.UserSelect;
+}
 
-// Define an object that specifies which fields to include when retrieving posts
-export const PostsDataInclude = {
-  // Include the user associated with each post
-  user: {
-    select: userDataSelect,
-  },
-} satisfies Prisma.PostInclude; // This object conforms to the Prisma.PostInclude interface
+export function getPostDataInclude(loggedInUserId: string) {
+  return {
+    user: {
+      select: getUserDataFunctionSelect(loggedInUserId),
+    },
+  } satisfies Prisma.PostInclude;
+}
+
+// // Define an object that specifies which fields to include when retrieving posts
+// export const PostsDataInclude = {
+//   // Include the user associated with each post
+
+// }  // This object conforms to the Prisma.PostInclude interface
 
 // Define a type for the post data that includes the specified fields
 export type PostData = Prisma.PostGetPayload<{
   // The include object specifies which fields to include in the payload
-  include: typeof PostsDataInclude;
+  include: ReturnType<typeof getPostDataInclude>;
 }>;
 
 // The code is using Prisma, a popular ORM (Object-Relational Mapping) tool,
@@ -33,4 +54,9 @@ export type PostData = Prisma.PostGetPayload<{
 export interface PostsPage {
   posts: PostData[];
   nextCursor: string | null;
+}
+
+export interface FollowerInfo {
+  followers: number;
+  isFollowedByUser: boolean;
 }
