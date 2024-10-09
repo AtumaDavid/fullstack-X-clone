@@ -16,4 +16,8 @@
 # Data fetching
 
 - React Query
-- [ky] (https://github.com/sindresorhus/ky)
+- [ky] (https://github.com/sindresorhus/ky) (axios alternative)
+
+### Changing hashtags and "@" into actual links
+
+- react-linkify-it
